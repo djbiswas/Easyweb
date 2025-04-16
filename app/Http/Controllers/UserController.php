@@ -71,23 +71,14 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'phone' => 'required|unique:users,phone',
-            'nid_no' => 'sometimes',
-            'nid_file' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
             'father_name' => 'sometimes',
             'mother_name' => 'sometimes',
             'spouse_name' => 'sometimes',
             'present_address' => 'sometimes',
             'permanent_address' => 'sometimes',
             'photo' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
-            'referrar' => 'sometimes',
-            'nominee_name' => 'sometimes',
-            'nominee_father' => 'sometimes',
-            'nominee_mother' => 'sometimes',
-            'nominee_mobile' => 'sometimes',
-            'nominee_photo' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
-            'nominee_nid' => 'sometimes',
-            'nominee_nid_file' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
-            'nominee_relation' => 'sometimes'
+            'referrar' => 'sometimes'
+
         ]);
 
         if ($request->email) {
@@ -220,13 +211,12 @@ class UserController extends Controller
     {
         $user_list = AuthUser::pluck('name', 'id');
         $user = User::where('id', $id)->with('roles')->first();
-        $user_types = User_type::pluck('name', 'id');
         if (Auth()->user()->id == '1') {
             $roles = Role::pluck('name', 'id');
         } else {
             $roles = Role::whereNotIn('id', [1, 2])->pluck('name', 'id');
         }
-        return view("users.edit", compact('user_list', 'user_types', 'user', 'roles'));
+        return view("users.edit", compact('user_list', 'user', 'roles'));
     }
 
     /**
@@ -251,15 +241,7 @@ class UserController extends Controller
             'present_address' => 'sometimes',
             'permanent_address' => 'sometimes',
             'photo' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
-            'referrar' => 'sometimes',
-            'nominee_name' => 'sometimes',
-            'nominee_father' => 'sometimes',
-            'nominee_mother' => 'sometimes',
-            'nominee_mobile' => 'sometimes',
-            'nominee_photo' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
-            'nominee_nid' => 'sometimes',
-            'nominee_nid_file' => 'sometimes|mimes:jpeg,bmp,png,jpg|max:2024',
-            'nominee_relation' => 'sometimes'
+            'referrar' => 'sometimes'
 
         ]);
 
@@ -284,19 +266,9 @@ class UserController extends Controller
         $user->spouse_name = $request->spouse_name;
         $user->present_address = $request->present_address;
         $user->permanent_address = $request->permanent_address;
-        $user->referrar = $request->referrar;
-        $user->nominee_name = $request->nominee_name;
-        $user->nominee_father = $request->nominee_father;
-        $user->nominee_mother = $request->nominee_mother;
-        $user->nominee_mobile = $request->nominee_mobile;
-        $user->nominee_nid = $request->nominee_nid;
-        $user->nominee_relation = $request->nominee_relation;
         // $user->editor = Auth()->user()->id;
 
         $user_photo = $user->photo;
-        $user_nid_file = $user->nid_file;
-        $user_nominee_photo = $user->nominee_photo;
-        $user_nominee_nid_file = $user->nominee_nid_file;
 
         //$user_info = User_info::find($user_info_id);
 

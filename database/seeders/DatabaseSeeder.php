@@ -14,13 +14,8 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call(LaratrustSeeder::class);
-        $this->call(PageSeeder::class);
+        // $this->call(PageSeeder::class);
 
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([CmsSeeder::class,]);
     }
 }

@@ -22,7 +22,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        // return view('admin.pages.create');
+        return view('admin.pages.create');
     }
 
     /**
@@ -30,11 +30,13 @@ class PageController extends Controller
      */
     public function store(StorePageRequest $request)
     {
-        $page = new Page();
-        $page->name = $request->name;
-        $page->url = $request->url;
-        $page->info = $request->info;
-        $page->save();
+        // $page = new Page();
+        // $page->name = $request->name;
+        // $page->url = $request->url;
+        // $page->info = $request->info;
+        // $page->save();
+
+        Page::create($request->all());
 
         flash('page Adding Success.')->success();
         return redirect()->route('pages.index');
@@ -43,20 +45,25 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Page $page)
+    public function show($slug)
     {
-        //
-    }
-
-    public function page($slug)
-    {
-        $page = Page::where('url', $slug)->first();
+        $page = Page::where('slug', $slug)->where('status', 'published')->firstOrFail();
         if ($page) {
             return view('front.page', compact('page'));
         } else {
             return view('front.404');
         }
     }
+
+    // public function page($slug)
+    // {
+    //     $page = Page::where('slug', $slug)->where('status', 'published')->firstOrFail();
+    //     if ($page) {
+    //         return view('front.page', compact('page'));
+    //     } else {
+    //         return view('front.404');
+    //     }
+    // }
 
 
 
@@ -74,14 +81,7 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, Page $page)
     {
-        // return $request->all();
-
-        $page->name = $request->name;
-        $page->url = $request->url;
-        $page->info = $request->info;
-        $page->save();
-
-        flash('page Updating Success.')->success();
+        $page->update($request->all());
         return redirect()->route('pages.index');
     }
 
@@ -90,6 +90,7 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
-        //
+        $page->delete();
+        return back();
     }
 }
